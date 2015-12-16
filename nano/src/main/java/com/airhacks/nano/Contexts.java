@@ -1,5 +1,6 @@
 package com.airhacks.nano;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -71,7 +72,9 @@ public interface Contexts {
             try (BufferedReader buffer = new BufferedReader(new InputStreamReader(requestBody))) {
                 requestContent = buffer.lines().collect(Collectors.joining("\n"));
             }
-            int statusCode = request.process(he.getRequestMethod(), requestContent, writer);
+            Headers requestHeaders = he.getRequestHeaders();
+            Headers responseHeaders = he.getResponseHeaders();
+            int statusCode = request.process(he.getRequestMethod(), requestHeaders, responseHeaders, requestContent, writer);
             String content = builder.toString();
             he.sendResponseHeaders(statusCode, content.length());
             responseBody.write(content.getBytes());
