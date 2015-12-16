@@ -63,7 +63,6 @@ public interface Contexts {
             StringBuilder builder = new StringBuilder();
             ResponseWriter writer = builder::append;
             int statusCode = request.process(he.getRequestMethod(), he.getRequestBody(), writer);
-            System.out.println("- " + statusCode);
             String content = builder.toString();
             he.sendResponseHeaders(statusCode, content.length());
             responseBody.write(content.getBytes());
@@ -75,10 +74,9 @@ public interface Contexts {
     public static HttpContext create(HttpServer server, Path path) {
         HttpHandler handler = instantiate(path);
         final String extracted = extractContext(path);
-        System.out.println("Registering: " + extracted);
         HttpContext context = server.createContext(extracted);
         context.setHandler(handler);
-        System.out.println("Registering context with path: " + context.getPath());
+        System.out.println("Context registered: " + context.getPath());
         return context;
     }
 
