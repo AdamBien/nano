@@ -1,5 +1,6 @@
-package com.airhacks.nano;
+package nano;
 
+import com.airhacks.nano.Contexts;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
