@@ -4,9 +4,12 @@ import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -15,6 +18,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -62,7 +66,12 @@ public interface Contexts {
             final OutputStream responseBody = he.getResponseBody();
             StringBuilder builder = new StringBuilder();
             ResponseWriter writer = builder::append;
-            int statusCode = request.process(he.getRequestMethod(), he.getRequestBody(), writer);
+            final InputStream requestBody = he.getRequestBody();
+            String requestContent = "";
+            try (BufferedReader buffer = new BufferedReader(new InputStreamReader(requestBody))) {
+                requestContent = buffer.lines().collect(Collectors.joining("\n"));
+            }
+            int statusCode = request.process(he.getRequestMethod(), requestContent, writer);
             String content = builder.toString();
             he.sendResponseHeaders(statusCode, content.length());
             responseBody.write(content.getBytes());

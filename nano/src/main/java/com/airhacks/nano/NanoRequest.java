@@ -1,7 +1,5 @@
 package com.airhacks.nano;
 
-import java.io.InputStream;
-
 /**
  *
  * @author airhacks.com
@@ -9,5 +7,5 @@ import java.io.InputStream;
 @FunctionalInterface
 public interface NanoRequest {
 
-    int process(String method, InputStream request, ResponseWriter response);
+    int process(String method, String request, ResponseWriter response);
 }

@@ -1,5 +1,6 @@
 function process(method, request, response) {
-    response.write(method + "hey joe");
+    print(request);
+    response.write(method + "echo: " + request);
     return 200;
 }
 
