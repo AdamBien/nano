@@ -68,7 +68,7 @@ public interface Contexts {
             StringBuilder builder = new StringBuilder();
             ResponseWriter writer = builder::append;
             final InputStream requestBody = he.getRequestBody();
-            String requestContent = "";
+            String requestContent;
             try (BufferedReader buffer = new BufferedReader(new InputStreamReader(requestBody))) {
                 requestContent = buffer.lines().collect(Collectors.joining("\n"));
             }
