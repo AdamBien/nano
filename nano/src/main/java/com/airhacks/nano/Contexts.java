@@ -1,11 +1,13 @@
 package com.airhacks.nano;
 
 import com.sun.net.httpserver.HttpContext;
+import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,19 +56,34 @@ public interface Contexts {
             throw new IllegalStateException(ex);
         }
         Invocable invocable = (Invocable) engine;
-        return invocable.getInterface(HttpHandler.class);
+        NanoRequest request = invocable.getInterface(NanoRequest.class);
+
+        return (HttpExchange he) -> {
+            final OutputStream responseBody = he.getResponseBody();
+            StringBuilder builder = new StringBuilder();
+            ResponseWriter writer = builder::append;
+            int statusCode = request.process(he.getRequestMethod(), he.getRequestBody(), writer);
+            System.out.println("- " + statusCode);
+            String content = builder.toString();
+            he.sendResponseHeaders(statusCode, content.length());
+            responseBody.write(content.getBytes());
+            responseBody.flush();
+            he.close();
+        };
     }
 
     public static HttpContext create(HttpServer server, Path path) {
         HttpHandler handler = instantiate(path);
-        HttpContext context = server.createContext(extractContext(path));
+        final String extracted = extractContext(path);
+        System.out.println("Registering: " + extracted);
+        HttpContext context = server.createContext(extracted);
         context.setHandler(handler);
         System.out.println("Registering context with path: " + context.getPath());
         return context;
     }
 
     public static String extractContext(Path path) {
-        String fileName = path.toString();
+        String fileName = "/" + path.normalize().toString();
         int lastIndexOf = fileName.lastIndexOf(".");
         return fileName.substring(0, lastIndexOf);
 

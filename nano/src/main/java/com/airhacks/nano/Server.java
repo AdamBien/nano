@@ -15,11 +15,12 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         String rootFolder = args.length >= 1 ? args[0] : ".";
-        Path root = Paths.get(rootFolder);
         int port = args.length >= 2 ? Integer.parseInt(args[1]) : 4242;
+        Path root = Paths.get(rootFolder);
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         List<Path> discovered = Contexts.discoverContexts(root);
         discovered.stream().forEach(p -> Contexts.create(server, p));
+        System.out.println("Starting server on port: " + port);
         server.start();
     }
 }
