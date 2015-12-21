@@ -1,6 +1,9 @@
 # nano
 Micro Java 8 HTTP Server embracing the "Convention over Configuration" idea.
 
+Startup time: < 500ms
+Jar-size: 8.4 kB
+
 ## Start
 
 java -jar nano.jar [HANDLER_ROOT_FOLDER] [PORT_NUMBER]
