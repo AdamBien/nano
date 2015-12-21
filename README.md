@@ -2,6 +2,7 @@
 Micro Java 8 HTTP Server embracing the "Convention over Configuration" idea.
 
 Startup time: < 500ms
+
 Jar-size: 8.4 kB
 
 ## Start
@@ -23,7 +24,7 @@ function process(method, requestHeaders, responseHeaders, request, response) {
 
 ## Usage
 
-Http handlers are implemented in JavaScript and auto-discovered starting from root folder.
+Http handlers are implemented in JavaScript and auto-discovered.
 
 The folder structure is automatically translated into a context path:
 ```
@@ -32,7 +33,7 @@ root/developers/java/duke.js
 java -jar nano.jar root 4242
 ```
 
-The file duke.js:
+The HTTP handler duke.js:
 
 ```javascript
 function process(method, requestHeaders, responseHeaders, request, response) {
