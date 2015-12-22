@@ -5,6 +5,8 @@ Startup time: < 500ms
 
 Jar-size: 8.4 kB
 
+Performance: ~6k [#/sec]
+
 ## Start
 
 java -jar nano.jar [HANDLER_ROOT_FOLDER] [PORT_NUMBER]
