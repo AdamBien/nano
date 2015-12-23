@@ -16,7 +16,9 @@ public class ContextsTest {
     public void extractContext() {
         Path path = Paths.get("./src/test/js/hello/duke.js");
         String actual = Contexts.extractContext(path);
-        assertThat(actual, is("/src/test/js/hello/duke"));
+        Path actualPath = Paths.get(actual);
+        Path expectedPath = Paths.get("/src/test/js/hello/duke");
+        assertThat(actualPath, is(expectedPath));
     }
 
 }
